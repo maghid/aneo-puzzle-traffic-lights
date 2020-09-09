@@ -48,20 +48,31 @@ struct TrafficLight {
     int getNextSpeed(int speedInKmPerH) {
         cerr << "Calculating new speed" << endl;
         int speedInMetersPerSecond = DistanceUtils::toMetersPerSecond(speedInKmPerH);
-        int timeOfPassageInSeconds = distance / speedInMetersPerSecond;
+        float timeOfPassageInSeconds = distance / speedInMetersPerSecond;
 
         cerr << "----------------" << endl;
-        cerr << "Time of passage/duration " << (float) timeOfPassageInSeconds / duration << endl;
-        cerr << "ceil " << ceil((float) timeOfPassageInSeconds / duration) << endl;
-        cerr << "time duration " << (ceil((float) timeOfPassageInSeconds / duration)) * duration << endl;
+        cerr << "Time of passage/duration " << timeOfPassageInSeconds / duration << endl;
+        cerr << "ceil " << ceil(timeOfPassageInSeconds / duration) << endl;
+        cerr << "time duration " << (ceil(timeOfPassageInSeconds / duration)) * duration << endl;
         cerr << "----------------" << endl;
 
-
-        int timeOfNextGreenInSeconds = (ceil((float) timeOfPassageInSeconds / duration)) * duration;
+//        float cycleNumber = timeOfPassageInSeconds / duration;
+//        if (fmod(cycleNumber,duration) == 0) {
+//            cycleNumber++;
+//        } else {
+//            cycleNumber = ceil(cycleNumber);
+//        }
+        int timeOfNextGreenInSeconds = (ceil(timeOfPassageInSeconds / duration)) * duration;
         cerr << "Time of next green: " << timeOfNextGreenInSeconds << endl;
         int newSpeedInMetersPerSecond = distance / timeOfNextGreenInSeconds;
         cerr << "New speed in m/s: " << newSpeedInMetersPerSecond << endl;
         return DistanceUtils::toKmPerHour(newSpeedInMetersPerSecond);
+
+//        int timeOfNextGreenInSeconds = cycleNumber * duration;
+//        cerr << "Time of next green: " << timeOfNextGreenInSeconds << endl;
+//        int newSpeedInMetersPerSecond = distance / timeOfNextGreenInSeconds;
+//        cerr << "New speed in m/s: " << newSpeedInMetersPerSecond << endl;
+//        return DistanceUtils::toKmPerHour(newSpeedInMetersPerSecond);
     }
 };
 
