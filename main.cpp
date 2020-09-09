@@ -2,17 +2,17 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <math.h>
 
 using namespace std;
 
 class DistanceUtils {
-
+public:
     static int toMetersPerSecond(int speedInKmPerHour) {
-        return round(speedInKmPerHour / 3.6)
+        return round(speedInKmPerHour / 3.6);
     }
-
     static int toKmPerHour(int speedInMetersPerSecond) {
-        return round(speedInMetersPerSecond * 3.6)
+        return round(speedInMetersPerSecond * 3.6);
     }
 
 };
@@ -29,21 +29,38 @@ struct TrafficLight {
     }
 
     bool isGreen(int speedInKmPerH) {
-        int speedInMetersPerSecond = DistanceUtils::toMetersPerSecond(speedinMetersPerSecond);
+        cerr << "Start cycle" << endl;
+        cerr << "Speed in km/h: " << speedInKmPerH << endl;
+        int speedInMetersPerSecond = DistanceUtils::toMetersPerSecond(speedInKmPerH);
+        cerr << "Speed in m/s: " << speedInMetersPerSecond << endl;
         int timeOfPassageInSeconds = distance / speedInMetersPerSecond;
+        cerr << "Time of passage in seconds: " << timeOfPassageInSeconds << endl;
         if ((timeOfPassageInSeconds / duration)%2 == 0) {
             // If time of passage / durations is even, the light is green
+            cerr << "Light is green" << endl;
             return true;
         } else {
+            cerr << "Light is red" << endl;
             return false;
         }
     }
 
     int getNextSpeed(int speedInKmPerH) {
-        int speedInMetersPerSecond = DistanceUtils::toMetersPerSecond(speedinMetersPerSecond);
+        cerr << "Calculating new speed" << endl;
+        int speedInMetersPerSecond = DistanceUtils::toMetersPerSecond(speedInKmPerH);
         int timeOfPassageInSeconds = distance / speedInMetersPerSecond;
-        int timeOfNextGreenInSeconds = (ceil(timeOfPassageInSeconds / duration)) * duration;
+
+        cerr << "----------------" << endl;
+        cerr << "Time of passage/duration " << (float) timeOfPassageInSeconds / duration << endl;
+        cerr << "ceil " << ceil((float) timeOfPassageInSeconds / duration) << endl;
+        cerr << "time duration " << (ceil((float) timeOfPassageInSeconds / duration)) * duration << endl;
+        cerr << "----------------" << endl;
+
+
+        int timeOfNextGreenInSeconds = (ceil((float) timeOfPassageInSeconds / duration)) * duration;
+        cerr << "Time of next green: " << timeOfNextGreenInSeconds << endl;
         int newSpeedInMetersPerSecond = distance / timeOfNextGreenInSeconds;
+        cerr << "New speed in m/s: " << newSpeedInMetersPerSecond << endl;
         return DistanceUtils::toKmPerHour(newSpeedInMetersPerSecond);
     }
 };
@@ -95,10 +112,13 @@ int main()
             if (!trafficLight.isGreen(currentSpeed)){
                 // Calculate speed to run this traffic light as soon as it turns green
                 currentSpeed = trafficLight.getNextSpeed(currentSpeed);
+                cerr << "New speed in km/h:  " << currentSpeed << endl;
+                allGreen = false;
                 break;
+            } else {
+                allGreen = true;
             }
         }
-        allGreen = true;
     }
 
     // Write an answer using cout. DON'T FORGET THE "<< endl"
